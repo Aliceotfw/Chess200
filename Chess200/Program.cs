@@ -1,2 +1,9 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using RunChess100;
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        ChooseGames game = new ChooseGames();
+        game.ChooseGame();
+    }
+}
