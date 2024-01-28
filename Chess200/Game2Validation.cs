@@ -1,11 +1,37 @@
 ﻿using RunChess100;
+using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 
 namespace RunChess100;
 
 internal class Game2Validation
 {
-    public void Validate()
+
+    public bool Valid(Coordinates queenCurrent, Coordinates rook1Current, Coordinates rook2Current,
+        Coordinates kingBCurrent, Coordinates kingWCurrent)
     {
+        Rook rook1 = new Rook();
+        Rook rook2 = new Rook();
+        King kingW = new King();
+        King kingB = new King();
+        Queen queen = new Queen();
+        for (int i=--kingWCurrent.numberCoord; i<=++kingWCurrent.numberCoord; i++)
+            for(char j=--kingWCurrent.letterCoord; j<= ++kingWCurrent.letterCoord; j++)
+            {
+                Coordinates cord = new Coordinates();
+                cord.numberCoord = i;
+                cord.letterCoord = j;
+                if(i!=0 && j!=0 && (queen.CheckQueenCoord(queenCurrent, cord)!=true || rook1.CheckRookCoord(rook1Current, cord) != true
+                || rook2.CheckRookCoord(rook2Current, cord) != true || kingB.CheckKingCoord(kingBCurrent, cord) != true))
+                {
+                    return true;
+                }
+
+            }
+        return false;
+    }
+    public void Validate()
+    { 
 
         Game2Board chess = new Game2Board();
         Rook rook1 = new Rook();
@@ -13,15 +39,12 @@ internal class Game2Validation
         King kingW = new King();
         King kingB = new King();
         Queen queen = new Queen();
-        //queen.color = FigureColor.Black;
-        //rook1.color = FigureColor.Black;
-        //rook2.color = FigureColor.Black;
-        //kingW.color = FigureColor.White;
-        //kingB.color = FigureColor.Black;
 
-        bool isValid = true;
+
+        bool isValid1 = true;
         do
         {
+            if(isValid1!=true) Console.WriteLine("invalid input!");
             Console.WriteLine();
             Console.Write("Enter Black Queen's coordinate: ");
             queen.current = new Coordinates(Console.ReadLine());
@@ -34,14 +57,20 @@ internal class Game2Validation
             Console.Write("Enter White King's coordinate: ");
             kingW.current = new Coordinates(Console.ReadLine());
 
+            
             if (queen.CheckQueenCoord(queen.current, kingW.current) || rook1.CheckRookCoord(rook1.current, kingW.current)
                 || rook2.CheckRookCoord(rook2.current, kingW.current) || kingB.CheckKingCoord(kingB.current, kingW.current))
             {
-                isValid = false;
+                isValid1 = false;
             }
-            else isValid = true;
+            else if(Valid(queen.current, rook1.current, rook2.current, kingB.current, kingW.current)!=true)
+            {
+                isValid1 = false;
+            }
+            else isValid1 = true;
 
-        } while (isValid == false);
+
+        } while (isValid1 == false);
 
         chess.PrintBoard(queen.current, rook1.current, rook2.current, kingB.current, kingW.current);
     }
