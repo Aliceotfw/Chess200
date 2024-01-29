@@ -10,6 +10,7 @@ internal class Game2Validation
     public bool Valid(Coordinates queenCurrent, Coordinates rook1Current, Coordinates rook2Current,
         Coordinates kingBCurrent, Coordinates kingWCurrent)
     {
+        Coordinates cord = new Coordinates();
         Rook rook1 = new Rook();
         Rook rook2 = new Rook();
         King kingW = new King();
@@ -18,17 +19,22 @@ internal class Game2Validation
         for (int i=--kingWCurrent.numberCoord; i<=++kingWCurrent.numberCoord; i++)
             for(char j=--kingWCurrent.letterCoord; j<= ++kingWCurrent.letterCoord; j++)
             {
-                Coordinates cord = new Coordinates();
                 cord.numberCoord = i;
                 cord.letterCoord = j;
-                if(i!=0 && j!=0 && (queen.CheckQueenCoord(queenCurrent, cord)!=true || rook1.CheckRookCoord(rook1Current, cord) != true
-                || rook2.CheckRookCoord(rook2Current, cord) != true || kingB.CheckKingCoord(kingBCurrent, cord) != true))
+                if(i==0 && j==0)
+                {
+                    continue;
+                }
+                else if (kingB.CheckKingCoord(kingBCurrent, cord) !=true && queen.CheckQueenCoord(queenCurrent, cord) !=true &&
+                    rook1.CheckRookCoord(rook1Current, cord) !=true && rook2.CheckRookCoord(rook2Current, cord) !=true)
                 {
                     return true;
                 }
 
             }
-        return false;
+        
+         return false;
+       
     }
     public void Validate()
     { 
@@ -57,13 +63,13 @@ internal class Game2Validation
             Console.Write("Enter White King's coordinate: ");
             kingW.current = new Coordinates(Console.ReadLine());
 
-            
+
             if (queen.CheckQueenCoord(queen.current, kingW.current) || rook1.CheckRookCoord(rook1.current, kingW.current)
                 || rook2.CheckRookCoord(rook2.current, kingW.current) || kingB.CheckKingCoord(kingB.current, kingW.current))
             {
                 isValid1 = false;
             }
-            else if(Valid(queen.current, rook1.current, rook2.current, kingB.current, kingW.current)!=true)
+            else if (Valid(queen.current, rook1.current, rook2.current, kingB.current, kingW.current)!=true)
             {
                 isValid1 = false;
             }
